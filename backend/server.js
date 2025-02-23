@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
 const userRoutes = require("./routes/userRoutes");
 
 dotenv.config({ path: "../.env" });
@@ -15,10 +16,15 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Serve static files (frontend)
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Use user routes
 app.use("/api/users", userRoutes);
-
+// Route to serve the reset password page
+app.get("/reset-password/:token", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/reset-password.html"));
+});
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
