@@ -20,6 +20,9 @@ app.use(express.json());
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
+// Serve static files (uploaded images)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Route to serve the reset password page
 app.get("/reset-password/:token", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/reset-password.html"));

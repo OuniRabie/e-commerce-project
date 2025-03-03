@@ -27,10 +27,38 @@
         </select>
       </div>
       <div id="products" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      <form id="addProductForm" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Product Name" required />
+        <input type="text" name="category" placeholder="Category" required />
+        <input type="number" name="price" placeholder="Price" required />
+        <textarea
+          name="description"
+          placeholder="Description"
+          required
+        ></textarea>
+        <input type="number" name="stock" placeholder="Stock" required />
+        <input type="text" name="color" placeholder="Color" required />
+        <input type="file" name="image" accept="image/*" required />
+        <button type="submit">Add Product</button>
+      </form>
     </div>
     <script>
       const searchInput = document.getElementById("search");
+      const form = document.getElementById("addProductForm");
 
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        const response = await fetch("/api/products", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        console.log(data);
+      });
       // Filter products based on search input
       function filterProducts(products, query) {
         return products.filter(

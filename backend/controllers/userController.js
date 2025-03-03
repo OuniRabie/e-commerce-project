@@ -21,7 +21,6 @@ exports.register = async (req, res) => {
     // Generate verification token
     const token = user.generateAuthToken();
     // app name : E-commerce-project
-    // app password: ffwh vaal zsrx hpex
     // Send verification email
     const transporter = nodemailer.createTransport({
       service: "gmail",
