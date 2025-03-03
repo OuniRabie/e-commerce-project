@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productsRoutes");
 
 dotenv.config({ path: "../.env" });
 
@@ -19,12 +20,17 @@ app.use(express.json());
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// Use user routes
-app.use("/api/users", userRoutes);
 // Route to serve the reset password page
 app.get("/reset-password/:token", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/reset-password.html"));
 });
+app.get("/products", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/products.html"));
+});
+// Use user routes
+app.use("/api/users", userRoutes);
+// Use product routes
+app.use("/api", productRoutes);
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)

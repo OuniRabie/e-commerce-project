@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String },
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
 });
 
 // Hash password before saving
