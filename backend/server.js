@@ -19,6 +19,10 @@ app.use(cors());
 app.use(express.json());
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, "../frontend")));
+// Serve the Login page
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+});
 
 // Serve static files (uploaded images)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
