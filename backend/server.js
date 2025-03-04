@@ -46,6 +46,10 @@ app.get("/register", (req, res) => {
 app.get("/add-product", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/add-product.html"));
 });
+// Serve the Product Details page
+app.get("/product-details", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/product-details.html"));
+});
 // Use user routes
 app.use("/api/users", userRoutes);
 // Use product routes

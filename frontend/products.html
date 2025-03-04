@@ -4,151 +4,76 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Products</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        padding: 2rem;
+      }
+      .products-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+      .product-card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+      .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+      .product-card h2 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+      }
+      .product-card p {
+        color: #666;
+        margin: 0.25rem 0;
+      }
+      .product-card .price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #3b82f6;
+      }
+    </style>
   </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-6">Our Products</h1>
-      <div class="flex gap-4 mb-6">
-        <input
-          type="text"
-          id="search"
-          placeholder="Search products..."
-          class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <select
-          id="category"
-          class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">All Categories</option>
-          <option value="Smartphones">Smartphones</option>
-          <option value="Laptops">Laptops</option>
-          <option value="Smartwatches">Smartwatches</option>
-        </select>
-      </div>
-      <div id="products" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-      <form id="addProductForm" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Product Name" required />
-        <input type="text" name="category" placeholder="Category" required />
-        <input type="number" name="price" placeholder="Price" required />
-        <textarea
-          name="description"
-          placeholder="Description"
-          required
-        ></textarea>
-        <input type="number" name="stock" placeholder="Stock" required />
-        <input type="text" name="color" placeholder="Color" required />
-        <input type="file" name="image" accept="image/*" required />
-        <button type="submit">Add Product</button>
-      </form>
-    </div>
+  <body>
+    <h1 class="text-2xl font-bold mb-6">Our Products</h1>
+    <div id="products" class="products-container"></div>
+
     <script>
-      const searchInput = document.getElementById("search");
-      const form = document.getElementById("addProductForm");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-
-        const response = await fetch("/api/products", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await response.json();
-        console.log(data);
-      });
-      // Filter products based on search input
-      function filterProducts(products, query) {
-        return products.filter(
-          (product) =>
-            product.name.toLowerCase().includes(query.toLowerCase()) ||
-            product.description.toLowerCase().includes(query.toLowerCase())
-        );
-      }
-
-      // Display filtered products
-      function displayProducts(products) {
-        const productsContainer = document.getElementById("products");
-        productsContainer.innerHTML = "";
-
-        products.forEach((product) => {
-          const productCard = `
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-48 object-cover mb-4">
-        <h2 class="text-xl font-bold">${product.name}</h2>
-        <p class="text-gray-700">${product.description}</p>
-        <p class="text-blue-500 font-bold">$${product.price}</p>
-        <p class="text-sm text-gray-600">Stock: ${product.stock}</p>
-        <p class="text-sm text-gray-600">Color: ${product.color}</p>
-      </div>
-    `;
-          productsContainer.innerHTML += productCard;
-        });
-      }
-
-      // Fetch and display products
       async function fetchProducts() {
         try {
           const response = await fetch("/api/products");
           const products = await response.json();
+          const productsContainer = document.getElementById("products");
 
-          // Display all products initially
-          displayProducts(products);
+          productsContainer.innerHTML = "";
 
-          // Add event listener for search input
-          searchInput.addEventListener("input", () => {
-            const filteredProducts = filterProducts(
-              products,
-              searchInput.value
-            );
-            displayProducts(filteredProducts);
-          });
-        } catch (err) {
-          console.error("Error fetching products:", err);
-        }
-      }
-      const categorySelect = document.getElementById("category");
-
-      // Filter products by category
-      function filterByCategory(products, category) {
-        if (!category) return products;
-        return products.filter((product) => product.category === category);
-      }
-
-      // Fetch and display products
-      async function fetchProducts() {
-        try {
-          const response = await fetch("/api/products");
-          const products = await response.json();
-
-          // Display all products initially
-          displayProducts(products);
-
-          // Add event listener for search input
-          searchInput.addEventListener("input", () => {
-            const filteredProducts = filterProducts(
-              products,
-              searchInput.value
-            );
-            displayProducts(filteredProducts);
-          });
-
-          // Add event listener for category select
-          categorySelect.addEventListener("change", () => {
-            const filteredProducts = filterByCategory(
-              products,
-              categorySelect.value
-            );
-            displayProducts(filteredProducts);
+          products.forEach((product) => {
+            const productCard = `
+            <div class="product-card">
+              <img src="${product.images[0]}" alt="${product.name}">
+              <h2>${product.name}</h2>
+              <p>${product.description}</p>
+              <p class="price">$${product.price}</p>
+              <p>Stock: ${product.stock}</p>
+              <p>Color: ${product.color}</p>
+            </div>
+          `;
+            productsContainer.innerHTML += productCard;
           });
         } catch (err) {
           console.error("Error fetching products:", err);
         }
       }
 
-      // Fetch products when the page loads
       fetchProducts();
     </script>
   </body>
