@@ -31,8 +31,16 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/reset-password/:token", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/reset-password.html"));
 });
+// Serve the Forgot Password page
+app.get("/forgot-password", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/forgot-password.html"));
+});
 app.get("/products", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/products.html"));
+});
+// Serve the Registration page
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/register.html"));
 });
 // Serve the "Add Product" page
 app.get("/add-product", (req, res) => {
