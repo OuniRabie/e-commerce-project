@@ -30,6 +30,10 @@ app.get("/reset-password/:token", (req, res) => {
 app.get("/products", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/products.html"));
 });
+// Serve the "Add Product" page
+app.get("/add-product", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/add-product.html"));
+});
 // Use user routes
 app.use("/api/users", userRoutes);
 // Use product routes
